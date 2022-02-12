@@ -1,18 +1,22 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+local ToolNames = {"Item"}
+local Storage = game:GetService("ServerStorage")
+local itemprice = 50
 
-# Other files and folders
-.settings/
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
+local Part = script.Parent
+local ClickDetector = Part:WaitForChild("ClickDetector")
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+ClickDetector.MouseClick:connect(function(Player)
+	if Player and Player.Character then
+		if game.Player:FindFirstChild(ClickDetector.Parent.Name).leaderstats["Cash"].Value >= itemprice then
+			game.Player:FindFirstChild(ClickDetector.Parent.Name).leaderstats["Cash"].Value = game.Player:FindFirstChild(ClickDetector.Parent.Name).leaderstats["Cash"].Value - itemprice
+		end
+		local Backpack = Player:WaitForChild("Backpack")
+		for i = 1, #ToolNames do
+			local Tool = Storage:FindFirstChild(ToolNames[i])
+			if Tool then
+				Tool:clone().Parent = Backpack
+			end
+		end
+	end
+end)
